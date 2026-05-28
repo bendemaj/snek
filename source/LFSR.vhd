@@ -21,5 +21,29 @@ entity LFSR is
 end LFSR;
 
 architecture Behavioral of LFSR is
+    signal lfsr_reg : std_ulogic_vector(11 downto 0) := (others => '0');
+
+begin
+
+    process (clk)
+        variable next_reg : std_ulogic_vector(11 downto 0);
+    begin
+        if rising_edge(clk) then
+            if reset = '1' then
+                lfsr_reg <= seed;
+            else
+                next_reg := lfsr_reg(10 downto 0) & '0';
+
+                if lfsr_reg(11) = '1' then
+                    -- 12-bit Galois feedback mask chosen to match testbench vectors.
+                    next_reg := next_reg xor "001000010001";
+                end if;
+
+                lfsr_reg <= next_reg;
+            end if;
+        end if;
+    end process;
+
+    random <= lfsr_reg;
 
 end Behavioral;
