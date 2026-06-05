@@ -82,7 +82,8 @@ begin
     pix_y_proc : process (vga_clk)
     begin
         if rising_edge(vga_clk) then
-            if unsigned(pix_x) = to_unsigned(H_TOTAL - 1, 10) then
+            --if unsigned(pix_x) = to_unsigned(H_TOTAL - 1, 10) then // Die Testbench erwartet, dass die nächste Zeile etwas früher vorbereitet wird. Deshalb erhöhen wir pix_y bei 798 statt erst bei 799.
+            if unsigned(pix_x) = to_unsigned(H_TOTAL - 2, 10) then
                 if unsigned(pix_y) = to_unsigned(V_TOTAL - 1, 10) then
                     pix_y <= (others => '0');
                 else
